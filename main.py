@@ -8,7 +8,8 @@ from utils import (
     get_path_files,
     get_authorization_header,
     groups_files_by_extension,
-    print_sorted_inventory,
+    sort_inventory,
+    write_to_file,
 )
 from urls import create_url_repo_info, create_url_repo_items
 import os
@@ -44,7 +45,8 @@ def main() -> None:
 
     # Inventory of files
     inventory = groups_files_by_extension(files)
-    print_sorted_inventory(inventory)
+    inventory_sorted = sort_inventory(inventory)
+    write_to_file(inventory_sorted)
 
 
 if __name__ == "__main__":

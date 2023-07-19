@@ -4,6 +4,8 @@ Utils to process information
 from collections import defaultdict
 import base64
 import re
+import datetime
+import os
 
 
 def get_authorization_header(pat: str) -> dict[str, str]:
@@ -56,13 +58,30 @@ def groups_files_by_extension(file_list: list[str]) -> dict[str, list[str]]:
     return inventory
 
 
-def print_sorted_inventory(inventory: dict[str, list[str]]) -> None:
+def sort_inventory(inventory: dict[str, list[str]]) -> str:
     """
-    Prints the inventory of files sorted by the number of files per extension.
+    Sort by the number of files per extension.
     """
     sorted_inventory = sorted(
         inventory.items(), key=lambda item: len(item[1]), reverse=True
     )
 
+    result = ""
     for extension, files in sorted_inventory:
-        print(f"Extension {extension} -> {len(files)} files")
+        result += f"Extension {extension} -> {len(files)} files\n"
+    return result
+
+
+def write_to_file(data: str) -> None:
+    """
+    Writes the given data to a file in the 'inventories/' directory. The file's name is the current date.
+    """
+    # Ensure the 'inventories/' directory exists
+    if not os.path.exists("inventories"):
+        os.makedirs("inventories")
+
+    filename = datetime.datetime.now().strftime("%Y-%m-%d") + ".txt"
+    filepath = os.path.join("inventories", filename)
+
+    with open(filepath, "w") as f:
+        f.write(data)
