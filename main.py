@@ -3,7 +3,13 @@ Main file to orchestrate logic
 """
 
 from azure import get_response
-from utils import get_repo_id, get_path_files, get_authorization_header
+from utils import (
+    get_repo_id,
+    get_path_files,
+    get_authorization_header,
+    groups_files_by_extension,
+    print_sorted_inventory,
+)
 from urls import create_url_repo_info, create_url_repo_items
 import os
 
@@ -33,8 +39,11 @@ def main() -> None:
     url_repo_items = create_url_repo_items(organization, project, repo_id, branch)
     repo_items = get_response(url_repo_items, headers)
     files = get_path_files(repo_items)
-    print(f"\nFiles number: {len(files)}")
-    print(f"Files list: {files}")
+    print(f"\nTotal files: {len(files)}\n")
+
+    # Inventory of files
+    inventory = groups_files_by_extension(files)
+    print_sorted_inventory(inventory)
 
 
 if __name__ == "__main__":

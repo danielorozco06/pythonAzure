@@ -1,7 +1,9 @@
 """
 Utils to process information
 """
+from collections import defaultdict
 import base64
+import os
 
 
 def get_authorization_header(pat: str) -> dict[str, str]:
@@ -37,3 +39,26 @@ def get_repo_id(response: dict[object]) -> str:
     Extracts the repository ID from the response.
     """
     return response["id"]
+
+
+def groups_files_by_extension(file_list: list[str]) -> dict[str, list[str]]:
+    """
+    Groups files by their extension from a given list of file names.
+    """
+    inventory = defaultdict(list)
+    for file in file_list:
+        extension = os.path.splitext(file)[-1]
+        inventory[extension].append(file)
+    return inventory
+
+
+def print_sorted_inventory(inventory: dict[str, list[str]]) -> None:
+    """
+    Prints the inventory of files sorted by the number of files per extension.
+    """
+    sorted_inventory = sorted(
+        inventory.items(), key=lambda item: len(item[1]), reverse=True
+    )
+
+    for extension, files in sorted_inventory:
+        print(f"Extension {extension} -> {len(files)} files")
