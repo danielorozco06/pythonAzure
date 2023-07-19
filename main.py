@@ -24,8 +24,9 @@ def main() -> None:
     pat = os.getenv("PAT")
 
     # Set variables
-    repo_name = "ISXXX0001"
-    branch = "master"
+    repo_name = "Vicepresidencia%20Servicios%20de%20Tecnología.wiki"
+    branch = "wikiMaster"
+
     headers = get_authorization_header(pat)
 
     # Repo id

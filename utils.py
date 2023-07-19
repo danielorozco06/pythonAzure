@@ -3,7 +3,7 @@ Utils to process information
 """
 from collections import defaultdict
 import base64
-import os
+import re
 
 
 def get_authorization_header(pat: str) -> dict[str, str]:
@@ -47,7 +47,11 @@ def groups_files_by_extension(file_list: list[str]) -> dict[str, list[str]]:
     """
     inventory = defaultdict(list)
     for file in file_list:
-        extension = os.path.splitext(file)[-1]
+        match = re.search(r"\.([a-zA-Z0-9]+)$", file)
+        if match:
+            extension = match.group(1)
+        else:
+            extension = "No_Extension"
         inventory[extension].append(file)
     return inventory
 
